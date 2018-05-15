@@ -17,25 +17,29 @@ Plugin 'VundleVim/Vundle.vim'
 Plugin 'flazz/vim-colorschemes'
 
 """""""" vim scripts """"""""""""""""""
-Plugin 'vim-scripts/taglist.vim'
+"Plugin 'vim-scripts/taglist.vim'
 Plugin 'vim-scripts/c.vim'
 Plugin 'vim-scripts/minibufexpl.vim'
 Plugin 'vim-scripts/comments.vim'
 Plugin 'vim-scripts/winmanager'
 Plugin 'vim-scripts/syntastic'
+"Plugin 'w0rp/ale'
+
 """""""" git script """""""""""""""""""
 Plugin 'scrooloose/nerdtree'
 Plugin 'Valloric/YouCompleteMe'
-"Plugin 'scrooloose/syntastic'
 Plugin 'Lokaltog/vim-powerline'
+Plugin 'ludovicchabant/vim-gutentags'
 
 """""""  go script """"""""""""
 Plugin 'fatih/vim-go'
 Plugin 'Shougo/neocomplete'
 Plugin 'majutsushi/tagbar'
+Plugin 'Yggdroot/LeaderF'
 Plugin 'dgryski/vim-godef'
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'mileszs/ack.vim'
+
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -66,31 +70,74 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTree
 
 "------------------------------------------------------------------------------
 
-" ctags settings
+" tag list  settings
 
 "------------------------------------------------------------------------------
-let Tlist_Ctags_Cmd ='/usr/local/Cellar/ctags/5.8_1/bin/ctags'
+
+let Tlist_Ctags_Cmd ='/usr/local/Cellar/universal-ctags/HEAD-6418097/bin/ctags'
+let Tlist_Show_One_File=1
+let Tlist_Exit_OnlyWindow = 1
+
+
+"------------------------------------------------------------------------------
+
+"  vim-gutentags settings
+
+"------------------------------------------------------------------------------
 set tags=./.tags;,.tags
+let g:gutentags_ctags_executable='/usr/local/Cellar/universal-ctags/HEAD-6418097/bin/ctags'
+let g:gutentags_project_root=['.idea', '.root', '.project']
+let g:gutentags_ctags_tagfile='.tags'
+let s:vim_tags = expand('~/.cache/tags/')
+let g:gutentags_cache_dir = s:vim_tags
+
+let g:gutentags_ctags_extra_args = ['--fields=+niazS', '--extra=+q']
+"let g:gutentags_ctags_extra_args += ['--c++-kinds=+px']
+"let g:gutentags_ctags_extra_args += ['--c-kinds=+px']
+
+let g:gutentags_ctags_extra_args += ['--output-format=e-ctags']
+
+if !isdirectory(s:vim_tags)
+   silent! call mkdir(s:vim_tags, 'p')
+endif
+"------------------------------------------------------------------------------
+
+" leaderF settings
+
+"------------------------------------------------------------------------------
+
+let g:Lf_Ctags = "/usr/local/Cellar/universal-ctags/HEAD-6418097/bin/ctags"
+nmap <F9> :LeaderfBufTagAll<CR>
+
+
 "let g:molokai_original = 1
 "let g:rehash256 = 1
 "colorscheme molokai
+
+
 "------------------------------------------------------------------------------
 
 " neocomplete  setting
 
 "------------------------------------------------------------------------------
+
 let g:neocomplete#enable_at_startup = 1
 
 let g:godef_split=0
 let g:godef_same_file_in_same_window=1
+
+
 "------------------------------------------------------------------------------
 
 " syntastic setting
 
 "------------------------------------------------------------------------------
+
 let g:syntastic_check_on_open = 1
 let g:syntastic_lua_checkers = ['lua', 'luac']
 let g:syntastic_go_checkers = ['go', 'gofmt', 'golint'] 
+
+
 "------------------------------------------------------------------------------
 
 " Powerline setting
@@ -142,23 +189,24 @@ let g:ycm_complete_in_comments = 1
 let g:ycm_complete_in_strings = 1
 let g:ycm_collect_identifiers_from_comments_and_strings = 0
 
-"------------------------------------------------------------------------------
-
-" syntastic setting
 
 "------------------------------------------------------------------------------
-let Tlist_Show_One_File=1
-let Tlist_Exit_OnlyWindow = 1
-let Tlist_Ctags_Cmd="/usr/bin/ctags"
 
-"------------------------------------------------------------------------------
 " vim-go setting
+
 "------------------------------------------------------------------------------
 let g:go_highlight_functions = 1
 let g:go_highlight_methods = 1
 let g:go_highlight_structs = 1
 let g:go_highlight_operators = 1
 let g:go_highlight_build_constraints = 1
+
+
+"------------------------------------------------------------------------------
+
+" TagBar setting
+
+"------------------------------------------------------------------------------
 let g:tagbar_type_go = {
     \ 'ctagstype' : 'go',
     \ 'kinds'     : [
@@ -187,11 +235,6 @@ let g:tagbar_type_go = {
     \ 'ctagsargs' : '-sort -silent'
 \ }
 
-"------------------------------------------------------------------------------
-
-" TagBar Setting
-
-"------------------------------------------------------------------------------
 nmap <F8> :TagbarToggle<CR>
 
 
@@ -216,6 +259,7 @@ let g:winManagerWindowLayout='NERDTree|TagList'
 let g:winManagerWidth=30
 "let g:AutoOpenWinManager = 1
 nmap wm :WMToggle<cr>
+
 
 "------------------------------------------------------------------------------
 
