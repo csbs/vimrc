@@ -17,18 +17,18 @@ Plugin 'VundleVim/Vundle.vim'
 Plugin 'flazz/vim-colorschemes'
 
 """""""" vim scripts """"""""""""""""""
-"Plugin 'vim-scripts/taglist.vim'
 Plugin 'vim-scripts/c.vim'
 Plugin 'vim-scripts/minibufexpl.vim'
 Plugin 'vim-scripts/comments.vim'
 Plugin 'vim-scripts/winmanager'
 Plugin 'vim-scripts/syntastic'
 "Plugin 'w0rp/ale'
+Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
 
 """""""" git script """""""""""""""""""
 Plugin 'scrooloose/nerdtree'
 Plugin 'Valloric/YouCompleteMe'
-Plugin 'Lokaltog/vim-powerline'
 Plugin 'ludovicchabant/vim-gutentags'
 
 """""""  go script """"""""""""
@@ -68,16 +68,6 @@ autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 map <silent> <F2> :NERDTreeToggle<CR>
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 
-"------------------------------------------------------------------------------
-
-" tag list  settings
-
-"------------------------------------------------------------------------------
-
-let Tlist_Ctags_Cmd ='/usr/local/Cellar/universal-ctags/HEAD-6418097/bin/ctags'
-let Tlist_Show_One_File=1
-let Tlist_Exit_OnlyWindow = 1
-
 
 "------------------------------------------------------------------------------
 
@@ -100,6 +90,7 @@ let g:gutentags_ctags_extra_args += ['--output-format=e-ctags']
 if !isdirectory(s:vim_tags)
    silent! call mkdir(s:vim_tags, 'p')
 endif
+
 "------------------------------------------------------------------------------
 
 " leaderF settings
@@ -108,11 +99,6 @@ endif
 
 let g:Lf_Ctags = "/usr/local/Cellar/universal-ctags/HEAD-6418097/bin/ctags"
 nmap <F9> :LeaderfBufTagAll<CR>
-
-
-"let g:molokai_original = 1
-"let g:rehash256 = 1
-"colorscheme molokai
 
 
 "------------------------------------------------------------------------------
@@ -136,35 +122,33 @@ let g:godef_same_file_in_same_window=1
 let g:syntastic_check_on_open = 1
 let g:syntastic_lua_checkers = ['lua', 'luac']
 let g:syntastic_go_checkers = ['go', 'gofmt', 'golint'] 
-
-
+let g:syntastic_cpp_compiler = 'clang++'
+let g:syntastic_cpp_cpplint_exec = 'cpplint'
+let g:syntastic_cpp_checkers = ['cpplint', 'clang++'] 
+let g:syntastic_cpp_compiler_options = ' -std=c++11 -stdlib=libc++'
 "------------------------------------------------------------------------------
 
 " Powerline setting
 
 "------------------------------------------------------------------------------
+let g:airline_theme="dark"
 set laststatus=2
-let g:Powerline_symbols='unicode'
-
-"set foldenable
-"set foldnestmax=1
-"set foldmethod=syntax
+let g:airline_powerline_fonts=1 
 
 "------------------------------------------------------------------------------
 
 " YouCompleteMe setting
 
 "------------------------------------------------------------------------------
-
+let mapleader = ","
 let g:ycm_global_ycm_extra_conf = '~/.vim/bundle/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py'
-
 "let g:ycm_error_symbol = '>>'
 "let g:ycm_warning_symbol = '>*'
 nnoremap <leader>gl :YcmCompleter GoToDeclaration<CR>
 nnoremap <leader>gf :YcmCompleter GoToDefinition<CR>
 nnoremap <leader>gg :YcmCompleter GoToDefinitionElseDeclaration<CR>
-nnoremap <leader>jd :YcmCompleter GoToDefinitionElseDeclaration<CR>
-nmap <F4> :YcmDiags<CR>
+nnoremap <leader>gd :YcmCompleter GoToDefinitionElseDeclaration<CR>
+nmap <F6> :YcmDiags<CR>
 
 set completeopt=longest,menu
 autocmd InsertLeave * if pumvisible() == 0|pclose|endif
@@ -235,6 +219,41 @@ let g:tagbar_type_go = {
     \ 'ctagsargs' : '-sort -silent'
 \ }
 
+let g:tagbar_type_cpp = {
+    \ 'kinds' : [
+        \ 'd:macros:1',
+        \ 'g:enums',
+        \ 't:typedefs:0:0',
+        \ 'e:enumerators:0:0',
+        \ 'n:namespaces',
+        \ 'c:classes',
+        \ 's:structs',
+        \ 'u:unions',
+        \ 'f:functions',
+        \ 'm:members:0:0',
+        \ 'v:global:0:0',
+        \ 'x:external:0:0',
+        \ 'l:local:0:0'
+     \ ],
+     \ 'sro'        : '::',
+     \ 'kind2scope' : {
+         \ 'g' : 'enum',
+         \ 'n' : 'namespace',
+         \ 'c' : 'class',
+         \ 's' : 'struct',
+         \ 'u' : 'union'
+     \ },
+     \ 'scope2kind' : {
+         \ 'enum'      : 'g',
+         \ 'namespace' : 'n',
+         \ 'class'     : 'c',
+         \ 'struct'    : 's',
+         \ 'union'     : 'u'
+     \ }
+\ }
+
+
+
 nmap <F8> :TagbarToggle<CR>
 
 
@@ -302,7 +321,7 @@ set number
 " font and size
 "set guifont=Andale Mono:h14
 "set guifont=Monaco:h11
-set guifont=Menlo:h14
+"set guifont=Menlo:h14
 
 " Softtabs, 2 spaces
 set tabstop=2
