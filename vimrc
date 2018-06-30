@@ -29,6 +29,7 @@ Plugin 'vim-airline/vim-airline-themes'
 """""""" git script """""""""""""""""""
 Plugin 'scrooloose/nerdtree'
 Plugin 'Valloric/YouCompleteMe'
+Plugin 'rdnetto/YCM-Generator'
 Plugin 'ludovicchabant/vim-gutentags'
 
 """""""  go script """"""""""""
@@ -39,6 +40,11 @@ Plugin 'Yggdroot/LeaderF'
 Plugin 'dgryski/vim-godef'
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'mileszs/ack.vim'
+
+
+""""""" c++ script """"""""""""
+Plugin 'vim-scripts/a.vim'
+
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -82,8 +88,8 @@ let s:vim_tags = expand('~/.cache/tags/')
 let g:gutentags_cache_dir = s:vim_tags
 
 let g:gutentags_ctags_extra_args = ['--fields=+niazS', '--extra=+q']
-"let g:gutentags_ctags_extra_args += ['--c++-kinds=+px']
-"let g:gutentags_ctags_extra_args += ['--c-kinds=+px']
+let g:gutentags_ctags_extra_args += ['--c++-kinds=+px']
+let g:gutentags_ctags_extra_args += ['--c-kinds=+px']
 
 let g:gutentags_ctags_extra_args += ['--output-format=e-ctags']
 
@@ -126,9 +132,10 @@ let g:syntastic_cpp_compiler = 'clang++'
 let g:syntastic_cpp_cpplint_exec = 'cpplint'
 let g:syntastic_cpp_checkers = ['cpplint', 'clang++'] 
 let g:syntastic_cpp_compiler_options = ' -std=c++11 -stdlib=libc++'
+
 "------------------------------------------------------------------------------
 
-" Powerline setting
+" airline setting
 
 "------------------------------------------------------------------------------
 let g:airline_theme="dark"
@@ -140,14 +147,13 @@ let g:airline_powerline_fonts=1
 " YouCompleteMe setting
 
 "------------------------------------------------------------------------------
-let mapleader = ","
+"let mapleader = ""
 let g:ycm_global_ycm_extra_conf = '~/.vim/bundle/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py'
-"let g:ycm_error_symbol = '>>'
-"let g:ycm_warning_symbol = '>*'
-nnoremap <leader>gl :YcmCompleter GoToDeclaration<CR>
-nnoremap <leader>gf :YcmCompleter GoToDefinition<CR>
-nnoremap <leader>gg :YcmCompleter GoToDefinitionElseDeclaration<CR>
-nnoremap <leader>gd :YcmCompleter GoToDefinitionElseDeclaration<CR>
+let g:ycm_error_symbol = '>>'
+let g:ycm_warning_symbol = '>*'
+
+nnoremap gl :YcmCompleter GoToDefinition<CR>
+nnoremap gd :YcmCompleter GoToDefinitionElseDeclaration<CR>
 nmap <F6> :YcmDiags<CR>
 
 set completeopt=longest,menu
@@ -166,12 +172,20 @@ let g:ycm_collect_identifiers_from_tags_files=1
 let g:ycm_min_num_of_chars_for_completion=2
 let g:ycm_cache_omnifunc=0
 let g:ycm_seed_identifiers_with_syntax=1
-nnoremap <F5> :YcmForceCompileAndDiagnostics<CR>
+nnoremap <F7> :YcmForceCompileAndDiagnostics<CR>
 "force recomile with syntastic
 inoremap <leader><leader> <C-x><C-o>
 let g:ycm_complete_in_comments = 1
 let g:ycm_complete_in_strings = 1
 let g:ycm_collect_identifiers_from_comments_and_strings = 0
+
+"------------------------------------------------------------------------------
+
+" YCM-Generator  setting
+
+"------------------------------------------------------------------------------
+
+nnoremap <F3> :YcmGenerateConfig<CR>
 
 
 "------------------------------------------------------------------------------
